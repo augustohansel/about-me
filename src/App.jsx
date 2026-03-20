@@ -7,14 +7,14 @@ const CONTENT = {
     whatsapp: "WhatsApp",
     email: "E-mail",
     resume: "Currículo",
-    resumeLink: "./public/curriculo.pdf"
+    resumeLink: "/curriculo.pdf"
   },
   en: {
     role: "Full Stack Developer 🚀",
     whatsapp: "WhatsApp",
     email: "Email",
     resume: "Resume",
-    resumeLink: "./public/resume.pdf"
+    resumeLink: "/resume.pdf"
   }
 };
 
