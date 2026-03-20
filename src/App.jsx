@@ -7,12 +7,14 @@ const CONTENT = {
     whatsapp: "WhatsApp",
     email: "E-mail",
     resume: "Currículo",
+    resumeLink: "./public/curriculo.pdf"
   },
   en: {
     role: "Full Stack Developer 🚀",
     whatsapp: "WhatsApp",
     email: "Email",
     resume: "Resume",
+    resumeLink: "./public/resume.pdf"
   }
 };
 
@@ -143,7 +145,7 @@ function App() {
         >
           <ActionButton href="https://wa.me/5551997523087" icon={MessageCircle} text={t.whatsapp} />
           <ActionButton href="mailto:augustoph34@gmail.com" icon={Mail} text={t.email} />
-          <ActionButton href="./public/curriculo.pdf" icon={FileText} text={t.resume} />
+          <ActionButton href={t.resumeLink} icon={FileText} text={t.resume} />
           <ActionButton href="https://github.com/augustohansel" icon={Github} text="GitHub" />
         </div>
 
