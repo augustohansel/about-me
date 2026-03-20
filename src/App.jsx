@@ -143,7 +143,7 @@ function App() {
         >
           <ActionButton href="https://wa.me/5551997523087" icon={MessageCircle} text={t.whatsapp} />
           <ActionButton href="mailto:augustoph34@gmail.com" icon={Mail} text={t.email} />
-          <ActionButton href="./public/CurrículoAugusto.pdf" icon={FileText} text={t.resume} />
+          <ActionButton href="./public/curriculo.pdf" icon={FileText} text={t.resume} />
           <ActionButton href="https://github.com/augustohansel" icon={Github} text="GitHub" />
         </div>
 
