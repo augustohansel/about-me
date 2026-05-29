@@ -24,10 +24,10 @@ body {
     opacity: 0;
   }
   50% {
-    opacity: 0.6; /* Brilho máximo no meio do caminho */
+    opacity: 0.6;
   }
   100% {
-    transform: translateY(-150px) scale(0.5); /* Sobe e diminui um pouco */
+    transform: translateY(-150px) scale(0.5); 
     opacity: 0;
   }
 }

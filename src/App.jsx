@@ -120,10 +120,8 @@ export default function App() {
             <span className="text-xs text-zinc-700 tracking-[0.2em]">{t.secProjects}</span>
             <div className="flex-1 h-px bg-zinc-900" />
           </div>
-
-          <FilterRow filters={t.filters} active={activeFilter} onSelect={setActiveFilter} />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {filtered.map((project, i) => (
               <ProjectCard
                 key={project.name}
