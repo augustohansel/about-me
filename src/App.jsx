@@ -73,6 +73,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col items-center p-4 relative overflow-hidden cursor-none [&_*]:cursor-none">
       <BackgroundEffects mousePos={mousePos} />
 
+      {/* cursor customizado */}
       <div
         className="pointer-events-none fixed z-[100] w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_15px_4px_rgba(255,255,255,0.6)]"
         style={{
@@ -83,6 +84,7 @@ export default function App() {
       />
 
       <main className="z-[50] flex flex-col items-center w-full max-w-5xl">
+        {/* hero */}
         <div className="flex flex-col items-center mb-16 pt-12">
           <LanguageSwitcher lang={lang} setLang={handleSetLang} />
 
@@ -108,6 +110,7 @@ export default function App() {
           </div>
         </div>
 
+        {/* seção projetos */}
         <section className="w-full">
           <div
             className="flex items-center gap-4 mb-8 animate-slide-down"
@@ -130,6 +133,19 @@ export default function App() {
                 index={i}
               />
             ))}
+          </div>
+
+          <div className="flex justify-center mt-8">
+            <a
+              href="https://github.com/augustohansel"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-xs text-zinc-600 hover:text-zinc-300 transition-colors duration-200 group"
+            >
+              <span className="text-zinc-800 group-hover:text-zinc-500 transition-colors">+</span>
+              {t.moreOnGithub}
+              <Github size={50} className="opacity-50 group-hover:opacity-100 transition-opacity" />
+            </a>
           </div>
         </section>
       </main>

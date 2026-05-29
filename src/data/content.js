@@ -10,6 +10,7 @@ export const CONTENT = {
     allKey: 'todos',
     liveLabel: 'Visitar site',
     repoLabel: 'Repositório',
+    moreOnGithub: 'mais projetos no GitHub',
     projects: [
       {
         type: '',
@@ -64,6 +65,7 @@ export const CONTENT = {
     allKey: 'all',
     liveLabel: 'Live',
     repoLabel: 'Repository',
+    moreOnGithub: 'more projects on GitHub',
     projects: [
       {
         type: '',
