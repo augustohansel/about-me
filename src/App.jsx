@@ -1,48 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Github, Mail, FileText, MessageCircle } from 'lucide-react';
 
-const CONTENT = {
-  pt: {
-    role: "Desenvolvedor Full Stack 🚀",
-    whatsapp: "WhatsApp",
-    email: "E-mail",
-    resume: "Currículo",
-    resumeLink: "/curriculo.pdf"
-  },
-  en: {
-    role: "Full Stack Developer 🚀",
-    whatsapp: "WhatsApp",
-    email: "Email",
-    resume: "Resume",
-    resumeLink: "/resume.pdf"
-  }
-};
-
-const PARTICLES = Array.from({ length: 30 }).map((_, i) => ({
-  id: i,
-  left: `${Math.random() * 100}%`,
-  top: `${Math.random() * 100}%`,
-  duration: `${Math.random() * 10 + 10}s`,
-  delay: `${Math.random() * 5}s`,
-}));
-
-function useMousePosition() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleMouseMove = (e) => setMousePos({ x: e.clientX, y: e.clientY });
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  return mousePos;
-}
+import { CONTENT } from './data/content';
+import { useMousePosition } from './hooks/useMousePosition';
+import { BackgroundEffects } from './components/BackgroundEffects';
+import { ProjectCard } from './components/ProjectCard';
 
 const ActionButton = ({ href, icon: Icon, text }) => (
-  <a 
-    href={href} 
-    target="_blank" 
-    rel="noopener noreferrer" 
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
     className="flex items-center gap-2 px-5 py-2.5 bg-zinc-900 border border-zinc-800 rounded-lg hover:bg-zinc-800 hover:border-zinc-700 transition-all text-sm text-zinc-300"
   >
     <Icon size={16} />
@@ -51,17 +19,14 @@ const ActionButton = ({ href, icon: Icon, text }) => (
 );
 
 const LanguageSwitcher = ({ lang, setLang }) => (
-  <div 
-    className="flex bg-zinc-900 border border-zinc-800 rounded-md mb-6 overflow-hidden animate-slide-down"
-    style={{ animationDelay: '0.2s' }}
-  >
-    <button 
+  <div className="flex bg-zinc-900 border border-zinc-800 rounded-md mb-6 overflow-hidden animate-slide-down">
+    <button
       onClick={() => setLang('pt')}
       className={`px-3 py-1 transition-colors ${lang === 'pt' ? 'bg-zinc-800/50' : 'hover:bg-zinc-800 opacity-50 hover:opacity-100'}`}
     >
       🇧🇷
     </button>
-    <button 
+    <button
       onClick={() => setLang('en')}
       className={`px-3 py-1 transition-colors ${lang === 'en' ? 'bg-zinc-800/50' : 'hover:bg-zinc-800 opacity-50 hover:opacity-100'}`}
     >
@@ -70,89 +35,104 @@ const LanguageSwitcher = ({ lang, setLang }) => (
   </div>
 );
 
-const BackgroundEffects = ({ mousePos }) => {
-  const parallaxOffset = 20; 
-  const tx = (mousePos.x / window.innerWidth - 0.5) * -parallaxOffset;
-  const ty = (mousePos.y / window.innerHeight - 0.5) * -parallaxOffset;
+const FilterRow = ({ filters, active, onSelect }) => (
+  <div className="flex flex-wrap justify-center gap-2 mb-8">
+    {filters.map((f) => (
+      <button
+        key={f}
+        onClick={() => onSelect(f)}
+        className={`text-[11px] tracking-widest uppercase px-3 py-1 rounded-full border transition-all duration-200 ${
+          f === active
+            ? 'border-zinc-600 text-zinc-300 bg-zinc-900'
+            : 'border-zinc-900 text-zinc-700 hover:border-zinc-700 hover:text-zinc-400'
+        }`}
+      >
+        {f}
+      </button>
+    ))}
+  </div>
+);
 
-  return (
-    <>
-      <div 
-        className="pointer-events-none fixed inset-0 z-[40] transition-opacity duration-300"
-        style={{ background: `radial-gradient(150px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.06), transparent 40%)` }}
-      />
-      
-      <div 
-        className="pointer-events-none absolute -top-[50px] -left-[50px] z-[30]"
-        style={{
-          width: 'calc(100% + 100px)', 
-          height: 'calc(100% + 100px)', 
-          transform: `translate3d(${tx}px, ${ty}px, 0)`,
-          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)`,
-          backgroundSize: '30px 30px',
-        }}
-      />
-
-      <div className="pointer-events-none fixed inset-0 z-[20]">
-        {PARTICLES.map((p) => (
-          <div
-            key={p.id}
-            className="absolute w-1 h-1 bg-white rounded-full opacity-0 animate-float shadow-[0_0_8px_2px_rgba(255,255,255,0.4)]"
-            style={{ left: p.left, top: p.top, animationDuration: p.duration, animationDelay: p.delay }}
-          />
-        ))}
-      </div>
-    </>
-  );
-};
-
-function App() {
+export default function App() {
   const [lang, setLang] = useState('pt');
+  const [activeFilter, setActiveFilter] = useState('todos');
   const mousePos = useMousePosition();
   const t = CONTENT[lang];
 
+  const handleSetLang = (l) => {
+    setLang(l);
+    setActiveFilter(CONTENT[l].allKey);
+  };
+
+  const filtered =
+    activeFilter === t.allKey
+      ? t.projects
+      : t.projects.filter((p) => p.type === activeFilter);
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden cursor-none [&_*]:cursor-none">
-      
+    <div className="min-h-screen flex flex-col items-center p-4 relative overflow-hidden cursor-none [&_*]:cursor-none">
       <BackgroundEffects mousePos={mousePos} />
 
-      <div 
+      <div
         className="pointer-events-none fixed z-[100] w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_15px_4px_rgba(255,255,255,0.6)]"
-        style={{ left: `${mousePos.x}px`, top: `${mousePos.y}px`, transform: 'translate(-50%, -50%)' }}
+        style={{
+          left: `${mousePos.x}px`,
+          top: `${mousePos.y}px`,
+          transform: 'translate(-50%, -50%)',
+        }}
       />
 
-      <main className="z-[50] flex flex-col items-center w-full">
-        
-        <LanguageSwitcher lang={lang} setLang={setLang} />
+      <main className="z-[50] flex flex-col items-center w-full max-w-5xl">
+        <div className="flex flex-col items-center mb-16 pt-12">
+          <LanguageSwitcher lang={lang} setLang={handleSetLang} />
 
-        <h1 
-          className="text-4xl md:text-5xl font-bold mb-3 tracking-tight animate-slide-down text-center"
-          style={{ animationDelay: '0.5s' }}
-        >
-          Augusto Preuss Hansel
-        </h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-3 tracking-tight animate-slide-down text-center">
+            Augusto Preuss Hansel
+          </h1>
 
-        <p 
-          className="text-zinc-400 text-sm md:text-base mb-10 flex items-center gap-2 animate-slide-down"
-          style={{ animationDelay: '0.8s' }}
-        >
-          {t.role}
-        </p>
+          <p
+            className="text-zinc-500 text-sm md:text-base mb-10 animate-slide-down"
+            style={{ animationDelay: '0.2s' }}
+          >
+            {t.role}
+          </p>
 
-        <div 
-          className="flex flex-wrap justify-center gap-4 max-w-2xl animate-slide-down"
-          style={{ animationDelay: '1.0s' }}
-        >
-          <ActionButton href="https://wa.me/5551997523087" icon={MessageCircle} text={t.whatsapp} />
-          <ActionButton href="mailto:augustoph34@gmail.com" icon={Mail} text={t.email} />
-          <ActionButton href={t.resumeLink} icon={FileText} text={t.resume} />
-          <ActionButton href="https://github.com/augustohansel" icon={Github} text="GitHub" />
+          <div
+            className="flex flex-wrap justify-center gap-4 animate-slide-down"
+            style={{ animationDelay: '0.4s' }}
+          >
+            <ActionButton href="https://wa.me/5551997523087" icon={MessageCircle} text={t.wa} />
+            <ActionButton href="mailto:augustoph34@gmail.com" icon={Mail} text={t.email} />
+            <ActionButton href={t.cvLink} icon={FileText} text={t.cv} />
+            <ActionButton href="https://github.com/augustohansel" icon={Github} text="GitHub" />
+          </div>
         </div>
 
-      </main>
+        <section className="w-full">
+          <div
+            className="flex items-center gap-4 mb-8 animate-slide-down"
+            style={{ animationDelay: '0.5s' }}
+          >
+            <div className="flex-1 h-px bg-zinc-900" />
+            <span className="text-xs text-zinc-700 tracking-[0.2em]">{t.secProjects}</span>
+            <div className="flex-1 h-px bg-zinc-900" />
+          </div>
 
+          <FilterRow filters={t.filters} active={activeFilter} onSelect={setActiveFilter} />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filtered.map((project, i) => (
+              <ProjectCard
+                key={project.name}
+                project={project}
+                liveLabel={t.liveLabel}
+                repoLabel={t.repoLabel}
+                index={i}
+              />
+            ))}
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
-
-export default App;
