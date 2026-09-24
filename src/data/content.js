@@ -136,6 +136,16 @@ export const CONTENT = {
         live: false,
         liveUrl: 'https://ggwp-test.vercel.app/',
         repoUrl: 'https://github.com/augustohansel/ggwp',
+      },
+      {
+        type: '',
+        name: 'Preciso de Sangue',
+        desc: 'Web application to facilitate blood donation, quickly connecting those in need with potential donors.',
+        techs: ['Next.js', 'Supabase', 'TailwindCSS'],
+        image: '/projects/precisodesangue.png',
+        live: false,
+        liveUrl: 'https://precisodesangue.vercel.app/',
+        repoUrl: 'https://github.com/augustohansel/precisodesangue',
       }
     ],
   },
