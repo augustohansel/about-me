@@ -94,7 +94,7 @@ const Cursor = ({ pos }) => {
 
   return (
     <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-[100] w-4 h-4 -ml-2 -mt-2 rounded-full"
+      className="cursor-dot pointer-events-none fixed left-0 top-0 z-[100] w-4 h-4 -ml-2 -mt-2 rounded-full"
       style={{ x: sx, y: sy, background: '#0f1020' }}
       animate={{ scale: hover ? 2.8 : 1, opacity: hover ? 0.35 : 1 }}
       transition={{ duration: 0.25, ease }}
@@ -112,14 +112,14 @@ const ScrollBar = () => {
 const Nav = ({ lang, setLang, active, onNavigate }) => {
   const L = LABELS[lang];
   return (
-    <div className="fixed inset-x-0 top-4 z-50 flex justify-center pointer-events-none px-2">
+    <div className="fixed inset-x-0 top-[max(1rem,env(safe-area-inset-top))] z-50 flex justify-center pointer-events-none px-2">
       <motion.nav
         initial={{ y: -90, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.9, ease, delay: 0.7 }}
-        className="pointer-events-auto flex items-center gap-1 rounded-full bg-white/90 backdrop-blur px-2 py-1.5 shadow-lg shadow-black/10 max-w-full"
+        className="pointer-events-auto no-scrollbar flex items-center gap-0.5 sm:gap-1 rounded-full bg-white/90 backdrop-blur px-1.5 sm:px-2 py-1.5 shadow-lg shadow-black/10 max-w-full overflow-x-auto"
       >
-        <a href="#top" className="flex items-center gap-2 pl-1 pr-3 text-sm font-bold">
+        <a href="#top" className="hidden sm:flex items-center gap-2 pl-1 pr-3 text-sm font-bold">
           <motion.span
             whileHover={{ rotate: 90 }}
             transition={spring}
@@ -131,7 +131,7 @@ const Nav = ({ lang, setLang, active, onNavigate }) => {
           <span className="hidden sm:inline">Augusto</span>
         </a>
         {SECTIONS.map((id) => (
-          <a key={id} href={`#${id}`} onClick={() => onNavigate(id)} className="relative px-3 py-1.5 rounded-full text-sm font-semibold">
+          <a key={id} href={`#${id}`} onClick={() => onNavigate(id)} className="relative px-2 sm:px-3 py-2 sm:py-1.5 rounded-full text-[12px] sm:text-sm font-semibold whitespace-nowrap">
             {active === id && (
               <motion.span
                 layoutId="navpill"
@@ -145,7 +145,7 @@ const Nav = ({ lang, setLang, active, onNavigate }) => {
         ))}
         <div className="flex rounded-full bg-black/5 p-0.5 ml-1">
           {['pt', 'en'].map((l) => (
-            <button key={l} onClick={() => setLang(l)} className="relative px-3 py-1 rounded-full text-xs font-bold uppercase">
+            <button key={l} onClick={() => setLang(l)} className="relative px-2.5 sm:px-3 py-1.5 sm:py-1 rounded-full text-[11px] sm:text-xs font-bold uppercase">
               {lang === l && (
                 <motion.span
                   layoutId="langpill"
@@ -231,7 +231,7 @@ const Experience = ({ t, lang }) => {
   return (
     <section id="exp" className="max-w-5xl mx-auto px-5 py-24">
       <div className="flex items-end justify-between mb-5">
-        <Reveal><h2 className="f-head text-5xl md:text-6xl">{LABELS[lang].exp}</h2></Reveal>
+        <Reveal><h2 className="f-head text-4xl sm:text-5xl md:text-6xl">{LABELS[lang].exp}</h2></Reveal>
         <div className="flex gap-2">
           {[Briefcase, BookOpen].map((Icon, n) => (
             <motion.button
@@ -285,7 +285,7 @@ const Experience = ({ t, lang }) => {
                 className="grid md:grid-cols-[170px_1fr] gap-x-6 py-6 border-b"
                 style={{ borderColor: '#e6dac6' }}
               >
-                <p className="text-sm font-bold md:pt-1" style={{ color: DOT_COLORS[i % DOT_COLORS.length] }}>{it.period}</p>
+                <p className="text-sm font-bold mb-2 md:mb-0 md:pt-1" style={{ color: DOT_COLORS[i % DOT_COLORS.length] }}>{it.period}</p>
                 <div>
                   <button
                     onClick={() => expandable && setOpen(isOpen ? -1 : i)}
@@ -425,7 +425,7 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div id="top" className="min-h-screen cursor-none [&_*]:cursor-none" style={{ background: C.bg, color: C.ink }}>
+      <div id="top" className="min-h-screen overflow-x-hidden cursor-none [&_*]:cursor-none" style={{ background: C.bg, color: C.ink }}>
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Instrument+Serif:ital@1&family=Hanken+Grotesk:wght@400;500;600;700&display=swap');
           html{scroll-behavior:smooth}
@@ -433,6 +433,9 @@ export default function App() {
           .f-head{font-family:'Inter Tight',system-ui,sans-serif;font-weight:800;letter-spacing:-.04em;line-height:1}
           .f-serif{font-family:'Instrument Serif',Georgia,serif;font-style:italic;font-weight:400;letter-spacing:-.02em}
           .f-body{font-family:'Hanken Grotesk',system-ui,sans-serif}
+          .no-scrollbar{scrollbar-width:none}
+          .no-scrollbar::-webkit-scrollbar{display:none}
+          @media (hover:none),(pointer:coarse){.cursor-dot{display:none}}
           @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
         `}</style>
 
@@ -442,9 +445,9 @@ export default function App() {
 
         <main className="f-body">
           {/* hero */}
-          <section className="relative min-h-screen grid place-items-center px-5">
+          <section className="relative min-h-[100svh] grid place-items-center px-5">
             <motion.div style={{ y: heroY, opacity: heroOpacity }} className="w-fit">
-              <h1 className="flex items-center gap-[0.12em] text-[clamp(2.6rem,10vw,7.5rem)]">
+              <h1 className="flex items-center gap-[0.12em] text-[clamp(1.75rem,9vw,7.5rem)] md:text-[clamp(2.6rem,10vw,7.5rem)]">
                 <Mask delay={0.1}><span className="f-head">{h.first}</span></Mask>
                 <motion.span
                   className="text-[0.55em] inline-block shrink-0 mx-[0.12em] leading-none"
@@ -464,7 +467,7 @@ export default function App() {
                 <Mask delay={0.3}><span className="f-serif">{h.last}</span></Mask>
               </h1>
               <motion.div
-                className="flex justify-between mt-3 text-sm font-bold tracking-[0.18em]"
+                className="flex justify-between gap-4 mt-3 text-[11px] sm:text-sm font-bold tracking-[0.14em] sm:tracking-[0.18em]"
                 style={{ color: C.blue }}
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -512,7 +515,7 @@ export default function App() {
           {/* sobre */}
           <section id="about" className="max-w-6xl mx-auto px-3 md:px-5 py-16">
             <motion.div
-              className="grid md:grid-cols-2 gap-10 rounded-[2.5rem] p-8 md:p-14"
+              className="grid md:grid-cols-2 gap-8 md:gap-10 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-14"
               style={{ background: C.ink }}
               initial={{ opacity: 0, y: 60, scale: 0.97 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -522,14 +525,14 @@ export default function App() {
               <div>
                 <div className="flex items-center gap-4 mb-8">
                   <motion.span
-                    className="grid place-items-center w-24 h-24 rounded-full text-3xl shrink-0"
+                    className="grid place-items-center w-16 h-16 md:w-24 md:h-24 rounded-full text-2xl md:text-3xl shrink-0"
                     style={{ background: C.yellow, color: '#8a7a50' }}
                     whileHover={{ rotate: 180, scale: 1.08 }}
                     transition={spring}
                   >
                     ✦︎
                   </motion.span>
-                  <h2 className="f-head text-3xl text-white">
+                  <h2 className="f-head text-2xl md:text-3xl text-white">
                     {h.hi[0]}<br />{h.hi[1]} <span style={{ color: C.pink }}>{h.name}</span>
                   </h2>
                 </div>
@@ -564,8 +567,8 @@ export default function App() {
           <Experience t={t} lang={lang} />
 
           {/* contato */}
-          <section id="contact" className="max-w-5xl mx-auto px-5 pt-10 pb-24">
-            <Reveal><h2 className="f-head text-4xl md:text-6xl mb-8">{t.contactTitle} :)</h2></Reveal>
+          <section id="contact" className="max-w-5xl mx-auto px-5 pt-10 pb-24 scroll-mt-16">
+            <Reveal><h2 className="f-head text-3xl sm:text-4xl md:text-6xl mb-8">{t.contactTitle} :)</h2></Reveal>
             <motion.div
               className="flex flex-wrap gap-3"
               variants={stagger}
